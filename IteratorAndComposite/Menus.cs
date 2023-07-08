@@ -35,9 +35,9 @@ namespace IteratorAndComposite
                 throw new NotImplementedException();
             }
 
-            public virtual IEnumerator CreaterIterator()
+            public virtual IEnumerable<MenuComponent> GetChildren()
             {
-                return new NullIterator();
+                yield break;
             }
 
             public string Name { get; set; }
@@ -57,10 +57,10 @@ namespace IteratorAndComposite
                 Price = price;
             }
 
-            public override IEnumerator CreaterIterator()
-            {
-                return new NullIterator();
-            }
+            //public override IEnumerator<MenuComponent> G()
+            //{
+            //    return new NullIterator();
+            //}
 
             public override void Print()
             {
@@ -121,9 +121,9 @@ namespace IteratorAndComposite
                 return (MenuComponent)_menuComponents[i];
             }
 
-            public override IEnumerator<MenuComponent> CreaterIterator()
+            public override IEnumerable<MenuComponent> GetChildren()
             {
-                return new CompositeIterator(_menuComponents.GetEnumerator());
+                return _menuComponents;
             }
 
             public override void Print()
@@ -143,66 +143,67 @@ namespace IteratorAndComposite
             }
         }
 
-        public class CompositeIterator : IEnumerator<MenuComponent>
-        {
-            readonly Stack<IEnumerator> _stack = new Stack<IEnumerator>();
-            public CompositeIterator(IEnumerator<MenuComponent> iterator)
-            {
-                _stack.Push(iterator);
-            }
-            public bool MoveNext()
-            {
-                  if(_stack.Count == 0)
-                {
-                    return false;
-                }
+        //public class CompositeIterator : IEnumerator<MenuComponent>
+        //{
+        //    readonly Stack<IEnumerator<MenuComponent>> _stack = new Stack<IEnumerator<MenuComponent>>();
+        //    public CompositeIterator(IEnumerator<MenuComponent> iterator)
+        //    {
+        //        _stack.Push(iterator);
+        //    }
+        //    public bool MoveNext()
+        //    {
+        //          if(_stack.Count == 0)
+        //        {
+        //            return false;
+        //        }
                 
-                else
-                {
-                    IEnumerator iterator = _stack.Peek();
-                    if(!iterator.MoveNext())
-                    {
-                        _stack.Pop();
-                        return MoveNext();
-                    }
-                    else
-                    {
-                        MenuComponent menuComponent = (MenuComponent)iterator.Current;
-                        if(menuComponent is Menu)
-                        {
-                            _stack.Push(menuComponent.CreaterIterator());
-                        }
-                        return true;
-                    }
-                }
-            }
+        //        else
+        //        {
+        //            IEnumerator<MenuComponent> iterator = _stack.Peek();
+        //            if(!iterator.MoveNext())
+        //            {
+        //                iterator.Dispose();
+        //                _stack.Pop();
+        //                return MoveNext();
+        //            }
+        //            else
+        //            {
+        //                MenuComponent menuComponent = iterator.Current;
+        //                if(menuComponent is Menu)
+        //                {
+        //                    _stack.Push(menuComponent.CreaterIterator());
+        //                }
+        //                return true;
+        //            }
+        //        }
+        //    }
 
-            public MenuComponent Current
-            {
-                get
-                {
-                    var iterator = _stack.Peek();
-                    var menuComponent = (MenuComponent)iterator.Current;
-                    if(menuComponent is Menu)
-                    {
-                        _stack.Push(menuComponent.CreaterIterator());
-                    }
-                    return menuComponent;
-                }
-            }
+            //public MenuComponent Current
+            //{
+            //    get
+            //    {
+            //        var iterator = _stack.Peek();
+            //        var menuComponent = iterator.Current;
+            //        if(menuComponent is Menu)
+            //        {
+            //            _stack.Push(menuComponent.CreaterIterator());
+            //        }
+            //        return menuComponent;
+            //    }
+            //}
 
-            object IEnumerator.Current => Current;
+            //object IEnumerator.Current=> Current;
 
-            public void Reset()
-            {
-                throw new NotImplementedException();
-            }
+            //public void Reset()
+            //{
+            //    throw new NotImplementedException();
+            //}
 
-            public void Dispose()
-            {
+            //public void Dispose()
+            //{
                 
-            }
+            //}
 
-        }
+        //}
     }
 }
